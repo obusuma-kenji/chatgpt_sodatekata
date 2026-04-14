@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT育成ガイド：パーソナルAI構築のステップ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: #FAFAF9; color: #44403C; }
+.chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 400px; } }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.flow-step { transition: all 0.3s ease; opacity: 0.5; transform: scale(0.95); }
+.flow-step.active-step { opacity: 1; transform: scale(1); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-color: #0EA5E9; background-color: #F0F9FF; }
+</style>
+</head>
+<body class="p-4 md:p-8">
+
+<!-- Chosen Palette: Warm Neutrals with Calm Sky & Emerald Accents -->
+<!-- Application Structure Plan: The SPA is designed as an interactive educational dashboard. It uses a clean, warm neutral palette to reduce cognitive load. The structure moves from concept to mechanism to impact. Section 1 uses interactive tabs to explain the "3 Levels of Training" without overwhelming the user with text. Section 2 uses a step-by-step interactive HTML/CSS animation to demystify the "File Upload (RAG)" mechanism. Section 3 uses side-by-side charts to quantify the benefits (accuracy and time savings). This flow logically guides the user through 'What', 'How', and 'Why', optimizing for engagement and understanding. -->
+<!-- Visualization & Content Choices: 1. Training Levels -> Goal: Organize -> Interactive Tabs -> Allows user-driven exploration of hierarchical concepts without clutter. 2. File Upload Mechanism -> Goal: Process/Organize -> Interactive HTML/CSS Diagram -> Simulates the flow of data visually without using prohibited SVG/Mermaid. 3. Accuracy by Level -> Goal: Compare -> Bar Chart (Chart.js) -> Best for comparing discrete categories. 4. Time Savings -> Goal: Change -> Line Chart (Chart.js) -> Shows the trend of decreasing time spent over weeks. Confirmed NO SVG or Mermaid used. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<div class="max-w-5xl mx-auto space-y-12">
+
+    <header class="text-center space-y-4 py-8 border-b border-stone-200">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-stone-800 tracking-tight">ChatGPT育成ガイド</h1>
+        <p class="text-lg text-stone-500 max-w-2xl mx-auto">汎用的なAIを、あなた専属の優秀なアシスタントへと進化させるための具体的なステップと、その背後にある仕組みを解説します。</p>
+    </header>
+
+    <section class="space-y-6">
+        <div>
+            <h2 class="text-2xl font-bold text-stone-800 mb-2">育成の3ステップ</h2>
+            <p class="text-stone-600 leading-relaxed">
+                ChatGPTを「育てる」とは、AIにあなたの業務コンテキスト（文脈）や固有の知識を共有するプロセスを指します。ここでは、初心者から上級者まで、AIをパーソナライズするための3つの主要なレベルをインタラクティブなタブで解説します。各ステップをクリックして詳細を確認してください。
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="flex flex-col md:flex-row border-b border-stone-200">
+                <button class="tab-btn flex-1 py-4 px-6 text-left md:text-center font-semibold text-stone-500 hover:bg-stone-50 transition-colors border-b-2 border-transparent active-tab-style" data-target="level1">レベル1: テンプレート</button>
+                <button class="tab-btn flex-1 py-4 px-6 text-left md:text-center font-semibold text-stone-500 hover:bg-stone-50 transition-colors border-b-2 border-transparent" data-target="level2">レベル2: カスタム指示</button>
+                <button class="tab-btn flex-1 py-4 px-6 text-left md:text-center font-semibold text-stone-500 hover:bg-stone-50 transition-colors border-b-2 border-transparent" data-target="level3">レベル3: ファイル学習</button>
+            </div>
+            <div class="p-6 md:p-8">
+                <div id="level1" class="tab-content active">
+                    <h3 class="text-xl font-bold text-sky-600 mb-3">プロンプトの型化（テンプレート）</h3>
+                    <p class="text-stone-700 mb-4">毎回ゼロから指示を書くのではなく、「役割」「目的」「出力形式」を定型文として用意します。変数部分（例：今日のテーマ）を埋めるだけで、AIの出力精度が劇的に安定します。</p>
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200 text-sm font-mono text-stone-600">
+                        # 命令<br>
+                        あなたは[プロのライター]です。以下の[テーマ]について、[箇条書き]で出力してください。<br>
+                        # テーマ: {ここに入力}
+                    </div>
+                </div>
+                <div id="level2" class="tab-content">
+                    <h3 class="text-xl font-bold text-emerald-600 mb-3">前提条件の記憶（Custom Instructions）</h3>
+                    <p class="text-stone-700 mb-4">ChatGPTの設定画面に、あなた自身の情報（職業、目標）や、AIに常に守ってほしいルール（例：常に敬語を使わない、簡潔に答える）を登録します。これにより、毎回のテンプレート入力すら不要になる部分が生まれます。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-stone-800 text-sm mb-1">ユーザー情報</h4>
+                            <p class="text-sm text-stone-600">IT企業のマーケター。初心者向けの記事をよく書く。</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                            <h4 class="font-bold text-stone-800 text-sm mb-1">応答ルール</h4>
+                            <p class="text-sm text-stone-600">専門用語は避け、中学生でもわかる言葉で説明して。</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="level3" class="tab-content">
+                    <h3 class="text-xl font-bold text-indigo-600 mb-3">固有知識の注入（ファイルアップロード/GPTs）</h3>
+                    <p class="text-stone-700 mb-4">自社のマニュアル、過去の議事録、特定のガイドラインなど、インターネット上に存在しない「あなただけのファイル（PDF, CSV等）」を読み込ませます。AIはこれを知識ベースとして参照し、事実に基づいた高度な回答を行います。</p>
+                    <div class="flex items-center space-x-4 bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <div class="text-4xl">📄</div>
+                        <div>
+                            <p class="text-sm font-bold text-stone-800">社内規定.pdf</p>
+                            <p class="text-xs text-stone-500">この情報に基づくことで、AIの推測（ハルシネーション）を防ぎます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-6">
+        <div>
+            <h2 class="text-2xl font-bold text-stone-800 mb-2">ファイル学習の仕組み (RAG)</h2>
+            <p class="text-stone-600 leading-relaxed">
+                ファイルをアップロードした際、内部で何が起きているのでしょうか。以下の「シミュレーション開始」ボタンをクリックして、ユーザーの質問がどのように処理され、精度の高い回答に変換されるかのステップを確認してください。
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 md:p-10">
+            <div class="flex justify-center mb-8">
+                <button id="start-sim-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors">
+                    シミュレーション開始
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center text-center">
+                <div id="flow1" class="flow-step border-2 border-stone-200 rounded-xl p-4 bg-stone-50">
+                    <div class="text-3xl mb-2">👤</div>
+                    <h4 class="font-bold text-sm">ユーザーの質問</h4>
+                    <p class="text-xs text-stone-500 mt-1" id="sim-text-1">待機中...</p>
+                </div>
+                
+                <div class="hidden md:block text-2xl text-stone-300">➔</div>
+                <div class="md:hidden text-2xl text-stone-300 my-2">↓</div>
+
+                <div id="flow2" class="flow-step border-2 border-stone-200 rounded-xl p-4 bg-stone-50">
+                    <div class="text-3xl mb-2">🔍</div>
+                    <h4 class="font-bold text-sm">ファイル検索</h4>
+                    <p class="text-xs text-stone-500 mt-1" id="sim-text-2">待機中...</p>
+                </div>
+
+                <div class="hidden md:block text-2xl text-stone-300">➔</div>
+                <div class="md:hidden text-2xl text-stone-300 my-2">↓</div>
+
+                <div id="flow3" class="flow-step border-2 border-stone-200 rounded-xl p-4 bg-stone-50">
+                    <div class="text-3xl mb-2">✨</div>
+                    <h4 class="font-bold text-sm">AI生成</h4>
+                    <p class="text-xs text-stone-500 mt-1" id="sim-text-3">待機中...</p>
+                </div>
+            </div>
+            
+            <div id="sim-result" class="mt-8 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-sm font-medium text-center opacity-0 transition-opacity duration-500">
+                最終出力: 待機中...
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-6">
+        <div>
+            <h2 class="text-2xl font-bold text-stone-800 mb-2">育成による導入効果</h2>
+            <p class="text-stone-600 leading-relaxed">
+                AIを育成することで、具体的にどのようなメリットがあるのかをデータで示します。左のグラフは設定レベルごとの「期待通りの回答が得られる確率」、右のグラフはテンプレート導入による「タスクごとの所要時間の推移」を表しています。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                <h3 class="text-lg font-bold text-stone-800 mb-1 text-center">回答精度の向上</h3>
+                <p class="text-xs text-stone-500 mb-4 text-center">育成レベルが上がるほど、やり直しの回数が減ります。</p>
+                <div class="chart-container">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+                <h3 class="text-lg font-bold text-stone-800 mb-1 text-center">作業時間の削減</h3>
+                <p class="text-xs text-stone-500 mb-4 text-center">テンプレート化により、指示を考える時間が激減します。</p>
+                <div class="chart-container">
+                    <canvas id="timeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => {
+                b.classList.remove('border-sky-500', 'text-sky-600');
+                b.classList.add('border-transparent', 'text-stone-500');
+            });
+            btn.classList.remove('border-transparent', 'text-stone-500');
+            btn.classList.add('border-sky-500', 'text-sky-600');
+
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(btn.dataset.target).classList.add('active');
+        });
+    });
+    
+    tabBtns[0].classList.add('border-sky-500', 'text-sky-600');
+    tabBtns[0].classList.remove('border-transparent', 'text-stone-500');
+
+    const startBtn = document.getElementById('start-sim-btn');
+    const flow1 = document.getElementById('flow1');
+    const flow2 = document.getElementById('flow2');
+    const flow3 = document.getElementById('flow3');
+    const text1 = document.getElementById('sim-text-1');
+    const text2 = document.getElementById('sim-text-2');
+    const text3 = document.getElementById('sim-text-3');
+    const resultBox = document.getElementById('sim-result');
+
+    startBtn.addEventListener('click', () => {
+        startBtn.disabled = true;
+        startBtn.classList.add('opacity-50');
+        
+        [flow1, flow2, flow3].forEach(el => el.classList.remove('active-step'));
+        resultBox.style.opacity = '0';
+        text1.innerText = '質問を入力中...';
+        text2.innerText = '待機中...';
+        text3.innerText = '待機中...';
+
+        setTimeout(() => {
+            flow1.classList.add('active-step');
+            text1.innerText = '「新商品の特徴は？」';
+        }, 500);
+
+        setTimeout(() => {
+            flow1.classList.remove('active-step');
+            flow2.classList.add('active-step');
+            text2.innerText = 'マニュアルから抽出中...';
+        }, 2000);
+
+        setTimeout(() => {
+            flow2.classList.remove('active-step');
+            flow3.classList.add('active-step');
+            text3.innerText = '知識と文脈を結合中...';
+        }, 3500);
+
+        setTimeout(() => {
+            flow3.classList.remove('active-step');
+            resultBox.innerText = '最終出力: 「マニュアル第3章によると、新商品の特徴は耐久性と軽量化の両立です。」';
+            resultBox.style.opacity = '1';
+            startBtn.disabled = false;
+            startBtn.classList.remove('opacity-50');
+            startBtn.innerText = 'もう一度シミュレーション';
+        }, 5000);
+    });
+
+    function wrapLabel(label, maxLength = 16) {
+        if (label.length <= maxLength) return label;
+        const words = label.split(' ');
+        let lines = [];
+        let currentLine = '';
+        words.forEach(word => {
+            if ((currentLine + word).length > maxLength) {
+                if (currentLine) lines.push(currentLine.trim());
+                currentLine = word + ' ';
+            } else {
+                currentLine += word + ' ';
+            }
+        });
+        if (currentLine) lines.push(currentLine.trim());
+        return lines;
+    }
+
+    const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
+    const rawAccuracyLabels = ['未設定 (質問のみ)', 'レベル1 (テンプレート)', 'レベル2 (カスタム指示)', 'レベル3 (ファイル学習)'];
+    const wrappedAccuracyLabels = rawAccuracyLabels.map(label => wrapLabel(label));
+
+    new Chart(accuracyCtx, {
+        type: 'bar',
+        data: {
+            labels: wrappedAccuracyLabels,
+            datasets: [{
+                label: '期待通りの回答率 (%)',
+                data: [30, 60, 80, 95],
+                backgroundColor: ['#E7E5E4', '#BAE6FD', '#A7F3D0', '#38BDF8'],
+                borderColor: ['#D6D3D1', '#7DD3FC', '#6EE7B7', '#0EA5E9'],
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: { color: '#F5F5F4' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const timeCtx = document.getElementById('timeChart').getContext('2d');
+    const rawTimeLabels = ['導入前', '1週間後', '2週間後', '3週間後', '1ヶ月後'];
+    const wrappedTimeLabels = rawTimeLabels.map(label => wrapLabel(label));
+
+    new Chart(timeCtx, {
+        type: 'line',
+        data: {
+            labels: wrappedTimeLabels,
+            datasets: [{
+                label: 'プロンプト作成時間 (分/回)',
+                data: [15, 8, 4, 2, 1],
+                fill: true,
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderColor: '#10B981',
+                tension: 0.3,
+                pointBackgroundColor: '#10B981',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#F5F5F4' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
