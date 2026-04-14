@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPTの育て方 〜うちのAIを専用パートナーにする方法〜</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background-color: #FFF8F0; color: #3D2B1F; }
+  .hero-gradient { background: linear-gradient(135deg, #FF8C42 0%, #FFB347 50%, #FF6B35 100%); }
+  .section-card { background: #FFFBF7; border: 2px solid #FFD6A0; border-radius: 20px; }
+  .comic-title { font-weight: 900; text-shadow: 3px 3px 0px rgba(0,0,0,0.15); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  .flow-step { transition: all 0.3s ease; opacity: 0.5; transform: scale(0.95); }
+  .flow-step.active-step { opacity: 1; transform: scale(1); box-shadow: 0 10px 20px rgba(255,140,66,0.3); border-color: #FF8C42; background-color: #FFF3E0; }
+  .chart-container { position: relative; width: 100%; max-width: 600px; margin: auto; height: 320px; }
+  .chapter-badge { background: linear-gradient(135deg, #FF8C42, #FF6B35); color: white; border-radius: 50px; padding: 6px 20px; font-weight: 900; font-size: 0.9rem; display: inline-block; }
+  .matrix-cell { border-radius: 16px; padding: 20px; text-align: center; transition: transform 0.2s; }
+  .matrix-cell:hover { transform: translateY(-3px); }
+  .toc-item { border-left: 4px solid #FF8C42; padding-left: 16px; margin-bottom: 8px; }
+  .notebooklm-badge { background: #2D2D2D; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; }
+  .media-section { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 24px; padding: 2rem; }
+  .audio-player-custom { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; }
+  .pulse-ring { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+  .tag { background: #FFE0B2; color: #E65100; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; }
+  .highlight-box { background: linear-gradient(135deg, #FFF3E0, #FFE0B2); border-left: 5px solid #FF8C42; border-radius: 8px; padding: 16px; }
+</style>
+</head>
+<body>
+
+<!-- ヒーローセクション -->
+<div class="hero-gradient py-12 px-4 text-center text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, white 0, white 1px, transparent 0, transparent 50%); background-size: 20px 20px;"></div>
+  <div class="relative max-w-4xl mx-auto">
+    <div class="notebooklm-badge inline-block mb-4">🎙️ NotebookLM セミナー資料</div>
+    <h1 class="comic-title text-4xl md:text-6xl mb-4">ChatGPTの育て方</h1>
+    <p class="text-xl md:text-2xl font-bold mb-2">〜うちのAIを専用パートナーにする方法〜</p>
+    <p class="text-base md:text-lg opacity-90 mb-6">「期待した答えが返ってこない」「毎回指示するのが面倒」…そんなお悩み、今日で解決！</p>
+    <div class="bg-white/20 rounded-2xl p-4 inline-block">
+      <p class="text-sm font-bold">提供：あなたの組織の知的生産性向上委員会</p>
+    </div>
+  </div>
+</div>
+
+<!-- 目次 -->
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="section-card p-6 mb-8">
+    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">📋 <span>本日のコンテンツ</span></h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="toc-item">
+        <p class="font-bold text-orange-700">第一話</p>
+        <p class="text-sm">AIは偏食家！？</p>
+        <p class="text-xs text-gray-500">知識注入とファイルアップロードのコツ</p>
+      </div>
+      <div class="toc-item">
+        <p class="font-bold text-orange-700">第二話</p>
+        <p class="text-sm">忘れっぽいAIを鍛える</p>
+        <p class="text-xs text-gray-500">メモリとルールの固定化</p>
+      </div>
+      <div class="toc-item">
+        <p class="font-bold text-orange-700">第三話</p>
+        <p class="text-sm">うちの優秀な新入り</p>
+        <p class="text-xs text-gray-500">2026年問題と自律型エージェント化</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- セミナー動画・音声セクション -->
+  <div class="media-section mb-8">
+    <h2 class="text-white text-2xl font-bold mb-6 text-center">🎬 セミナー動画 &amp; 音声</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 動画 -->
+      <div>
+        <h3 class="text-white font-bold mb-3 flex items-center gap-2">🎥 <span>解説動画</span></h3>
+        <video controls class="w-full rounded-xl shadow-lg" style="max-height: 280px;">
+          <source src="ChatGPTの育て方_small.mp4" type="video/mp4">
+          お使いのブラウザは動画再生に対応していません。
+        </video>
+      </div>
+      <!-- 音声 -->
+      <div>
+        <h3 class="text-white font-bold mb-3 flex items-center gap-2">🎵 <span>ポッドキャスト形式</span></h3>
+        <div class="audio-player-custom">
+          <div class="text-center mb-4 pulse-ring">
+            <div class="text-6xl">🤖</div>
+            <p class="text-white font-bold mt-2">ChatGPTの育て方</p>
+            <p class="text-gray-300 text-sm">NotebookLM Audio Overview</p>
+          </div>
+          <audio controls class="w-full" style="filter: invert(0.8) hue-rotate(180deg);">
+            <source src="chatGPTの育て方_small.m4a" type="audio/mp4">
+            お使いのブラウザは音声再生に対応していません。
+          </audio>
+          <p class="text-gray-400 text-xs mt-2 text-center">※ 通勤・移動中にもお聴きいただけます</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- サマリー画像（NotebookLM生成） -->
+  <div class="section-card p-6 mb-8">
+    <h2 class="text-xl font-bold mb-2 flex items-center gap-2">🖼️ <span>セミナーサマリー</span> <span class="notebooklm-badge">NotebookLM生成</span></h2>
+    <p class="text-sm text-gray-600 mb-4">セミナー内容をビジュアル化したサマリーマップです</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <img src="chatGPTの育て方.png" alt="ChatGPTの育て方 サマリー" class="w-full rounded-xl shadow-md hover:shadow-lg transition-shadow">
+        <p class="text-xs text-center text-gray-500 mt-2">育成を支える3つの柱・RAGとメモリ解説</p>
+      </div>
+      <div>
+        <img src="chatGPTの育て方_1.png" alt="ChatGPTの育て方 マンガ版" class="w-full rounded-xl shadow-md hover:shadow-lg transition-shadow">
+        <p class="text-xs text-center text-gray-500 mt-2">マンガで学ぶ！AIを育てよう</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 問題提起 -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🔥 問題提起</div>
+    <h2 class="text-2xl font-bold mb-4">「AIを育てる？そんな面倒なことやってられん！」</h2>
+    <div class="highlight-box mb-4">
+      <p class="font-bold text-orange-800 mb-2">お父さんの心の叫び：</p>
+      <ul class="text-sm text-orange-700 space-y-1 list-disc list-inside">
+        <li>業務に合わせてAIをカスタマイズしろ？</li>
+        <li>毎回プロンプトを書き直せ？</li>
+        <li>データを綺麗に整えてアップロード？</li>
+        <li>……誰がそんな面倒なこと毎日やるか！</li>
+      </ul>
+    </div>
+    <div class="bg-orange-600 text-white rounded-xl p-4 text-center">
+      <p class="font-bold">本日のテーマ：手動のAI育成（スパルタ教育）を即刻やめ、</p>
+      <p class="font-bold">ラクして賢いAIを手に入れる「自動化・省略化」の極意。</p>
+    </div>
+  </div>
+
+  <!-- 手動育成の問題点 -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">⚠️ なぜ手動育成がドツボにハマるのか</div>
+    <h2 class="text-2xl font-bold mb-6">AIの子育て（手動育成）がドツボにハマる理由</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">🧱</div>
+        <h3 class="font-bold text-red-700 mb-2">1. 実効処理制限の壁</h3>
+        <p class="text-sm text-red-600">110kトークン（約200ページ）を超えると情報が均等抽出され、文末カットや検索漏れが発生する。</p>
+      </div>
+      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">♾️</div>
+        <h3 class="font-bold text-yellow-700 mb-2">2. データクレンジングの呪縛</h3>
+        <p class="text-sm text-yellow-600">人間用の複雑な資料を、AIが読めるように手作業で整理・変換する作業が果てしない。</p>
+      </div>
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">🧹</div>
+        <h3 class="font-bold text-blue-700 mb-2">3. 記憶の掃除</h3>
+        <p class="text-sm text-blue-600">メモリ機能は便利だが、放置すると古い情報が干渉し回答が硬直化。月1回の定期的な掃除が必要。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第一話：カスタムGPT -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">第一話</div>
+    <h2 class="text-2xl font-bold mb-2">テンプレで一丁上がり！</h2>
+    <p class="text-gray-600 mb-6 text-sm">毎回教える手間をゼロにする「カスタムGPT」</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+        <h3 class="font-bold text-red-700 mb-3">❌ Before - 昭和のスパルタ</h3>
+        <p class="font-bold text-sm mb-2">毎日プロンプト入力</p>
+        <ul class="text-sm text-red-600 space-y-1 list-disc list-inside">
+          <li>私は誰か？</li>
+          <li>目的は何か？</li>
+          <li>出力のトーンは？</li>
+        </ul>
+      </div>
+      <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+        <h3 class="font-bold text-green-700 mb-3">✅ After - 令和のスマート</h3>
+        <p class="font-bold text-sm mb-2">一度作って永久に使い回す</p>
+        <ol class="text-sm text-green-600 space-y-1 list-decimal list-inside">
+          <li>背景情報の固定：ユーザーの属性と利用目的を定義</li>
+          <li>出力方法の指定：トーン（敬語/カジュアル）やフォーマットを指定</li>
+          <li>ファイル名連携：「規程A」に基づけと指示するだけで参照ヒット率が劇的向上</li>
+        </ol>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <p class="font-bold text-orange-800">コンセプト：「毎回指示する」から「一度作って使い回す」へのシフト</p>
+    </div>
+  </div>
+
+  <!-- 育成の3ステップ（インタラクティブタブ） -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🔑 育成の3大柱</div>
+    <h2 class="text-2xl font-bold mb-2">汎用AIから専用パートナーへ</h2>
+    <p class="text-gray-600 text-sm mb-6">各タブをクリックして詳細をご確認ください。</p>
+
+    <div class="bg-white rounded-2xl border border-orange-200 overflow-hidden">
+      <div class="flex flex-col md:flex-row border-b border-orange-200">
+        <button class="tab-btn flex-1 py-4 px-4 text-left md:text-center font-bold text-sm text-gray-500 hover:bg-orange-50 transition-colors border-b-2 border-transparent" data-target="pillar1" style="">💉 外部知識の注入</button>
+        <button class="tab-btn flex-1 py-4 px-4 text-left md:text-center font-bold text-sm text-gray-500 hover:bg-orange-50 transition-colors border-b-2 border-transparent" data-target="pillar2">🔒 文脈の固定</button>
+        <button class="tab-btn flex-1 py-4 px-4 text-left md:text-center font-bold text-sm text-gray-500 hover:bg-orange-50 transition-colors border-b-2 border-transparent" data-target="pillar3">🔄 継続的フィードバック</button>
+      </div>
+      <div class="p-6">
+        <div id="pillar1" class="tab-content active">
+          <h3 class="text-xl font-bold text-orange-600 mb-3">外部知識の注入 (Knowledge Injection)</h3>
+          <p class="text-gray-700 mb-4">PDFやExcelファイルをアップロードし、インターネットにない社内情報やプロジェクト資料をAIの「専門書」として教え込みます。</p>
+          <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+            <p class="text-sm font-bold text-orange-800 mb-2">📋 例：社労士事務所の場合</p>
+            <ul class="text-sm text-orange-700 space-y-1 list-disc list-inside">
+              <li>就業規則のテンプレートPDF</li>
+              <li>労働法改正の最新情報まとめ</li>
+              <li>顧客ごとの相談履歴CSV</li>
+            </ul>
+          </div>
+        </div>
+        <div id="pillar2" class="tab-content">
+          <h3 class="text-xl font-bold text-orange-600 mb-3">文脈の固定 (Context Locking)</h3>
+          <p class="text-gray-700 mb-4">「カスタム指示」を使い、AIの役割、顧客のトーン、専門性の深さなどの「変わらない働きのルール」を固定します。</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+              <p class="text-sm font-bold mb-1">土台（静的な規範）</p>
+              <p class="text-sm text-gray-600">出力方法（トーン、情報の深さ）や、ユーザーの背景情報など、絶対に揺るがない基本設定。</p>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+              <p class="text-sm font-bold mb-1">リビング（動的な経験）</p>
+              <p class="text-sm text-gray-600">「私はベジタリアン」「報告書は箇条書き」など、チャットを通じて自律的に蓄積される恒久的な記憶。</p>
+            </div>
+          </div>
+        </div>
+        <div id="pillar3" class="tab-content">
+          <h3 class="text-xl font-bold text-orange-600 mb-3">継続的フィードバック</h3>
+          <p class="text-gray-700 mb-4">回答の傾向を指導し、メモリ機能を活用してユーザーを持続的な視点の改善を促させることで、精度を継続的に高めます。</p>
+          <div class="highlight-box">
+            <p class="text-sm font-bold text-orange-800 mb-1">4つの成長サイクル</p>
+            <ol class="text-sm text-orange-700 space-y-1 list-decimal list-inside">
+              <li>実戦投入とモニタリング（種まき）</li>
+              <li>質の高いフィードバック（水やり）</li>
+              <li>ナレッジの更新とクレンジング（剪定）</li>
+              <li>プロンプトの標準化（収穫）</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ファイル学習の仕組み（RAGシミュレーション） -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🔍 仕組み解説</div>
+    <h2 class="text-2xl font-bold mb-2">AIは「生まれ変わる」のではなく、渡した本で「お勉強」している</h2>
+    <p class="text-gray-600 text-sm mb-6">「育成」の正体は、AIの脳を改造することではありません。その場で最適な「コンテキスト（文脈・資料）」を渡し、AIに「組織固有のルール」を理解させる共同作業（検索生成：RAG）なのです。</p>
+
+    <div class="bg-white rounded-2xl border border-orange-200 p-6">
+      <div class="flex justify-center mb-8">
+        <button id="start-sim-btn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl shadow-md transition-colors">
+          RAGシミュレーション開始
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center text-center">
+        <div id="flow1" class="flow-step border-2 border-gray-200 rounded-xl p-4 bg-gray-50">
+          <div class="text-3xl mb-2">👤</div>
+          <h4 class="font-bold text-sm">ユーザーの質問</h4>
+          <p class="text-xs text-gray-500 mt-1" id="sim-text-1">待機中...</p>
+        </div>
+        <div class="hidden md:block text-2xl text-orange-300">➔</div>
+        <div class="md:hidden text-2xl text-orange-300 my-2">↓</div>
+        <div id="flow2" class="flow-step border-2 border-gray-200 rounded-xl p-4 bg-gray-50">
+          <div class="text-3xl mb-2">📂</div>
+          <h4 class="font-bold text-sm">ファイル検索（RAG）</h4>
+          <p class="text-xs text-gray-500 mt-1" id="sim-text-2">待機中...</p>
+        </div>
+        <div class="hidden md:block text-2xl text-orange-300">➔</div>
+        <div class="md:hidden text-2xl text-orange-300 my-2">↓</div>
+        <div id="flow3" class="flow-step border-2 border-gray-200 rounded-xl p-4 bg-gray-50">
+          <div class="text-3xl mb-2">✨</div>
+          <h4 class="font-bold text-sm">AI生成（GPT）</h4>
+          <p class="text-xs text-gray-500 mt-1" id="sim-text-3">待機中...</p>
+        </div>
+      </div>
+      
+      <div id="sim-result" class="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-xl text-orange-800 text-sm font-medium text-center opacity-0 transition-opacity duration-500">
+        最終出力: 待機中...
+      </div>
+    </div>
+  </div>
+
+  <!-- AIが喜ぶデータ形式 -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🍱 データ形式</div>
+    <h2 class="text-2xl font-bold mb-2">AIが消化しやすいデータ形式とは？</h2>
+    <p class="text-gray-600 text-sm mb-6">綺麗に整えるのが面倒なら、最初から「AIが食べやすい形式」で保存しておくのが最大のズボラ術！</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-green-50 border-2 border-green-300 rounded-xl p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">📦</span>
+          <h3 class="font-bold text-green-700">JSON</h3>
+          <span class="tag">大好物 ◎</span>
+        </div>
+        <p class="text-sm text-green-600">構造が明確。FAQなど「1問1答」のナレッジに最適。ルールが明確なので検索精度が最高。</p>
+      </div>
+      <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">📝</span>
+          <h3 class="font-bold text-blue-700">Markdown</h3>
+          <span class="tag">食べやすい ○</span>
+        </div>
+        <p class="text-sm text-blue-600">見出し構造（#）だけで情報の階層性をAIが完璧に把握。特定のセクションを参照させる指示書に最適。</p>
+      </div>
+      <div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">📊</span>
+          <h3 class="font-bold text-yellow-700">CSV/Excel</h3>
+          <span class="tag">分析用 ○</span>
+        </div>
+        <p class="text-sm text-yellow-600">1行目に見出しを置くだけ。Advanced Data Analysisが勝手に分析。数値分析向け。</p>
+      </div>
+      <div class="bg-red-50 border-2 border-red-300 rounded-xl p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">📄</span>
+          <h3 class="font-bold text-red-700">構造化PDF</h3>
+          <span class="tag">消化不良に注意 △</span>
+        </div>
+        <p class="text-sm text-red-600">汎用性は高いが、複雑な組み紐みや固定化を避けたシンプルな1カラム構成が必須。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二話：全自動へ -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">第二話</div>
+    <h2 class="text-2xl font-bold mb-2">全自動へ、べー丁上がり！</h2>
+    <p class="text-gray-600 text-sm mb-6">機械に任せて、お茶を飲む。API連携のからくり</p>
+
+    <div class="bg-teal-50 border-2 border-teal-200 rounded-xl p-5 mb-4">
+      <h3 class="font-bold text-teal-700 text-lg mb-4">🔄 API連携・全自動コンベア</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-white rounded-xl p-3 shadow-sm">
+          <div class="text-2xl mb-1">📁</div>
+          <p class="text-xs font-bold">1. 社内フォルダに資料を追加</p>
+          <p class="text-xs text-gray-500 mt-1">Google Drive</p>
+        </div>
+        <div class="text-teal-400 self-center text-2xl hidden md:block">→</div>
+        <div class="bg-white rounded-xl p-3 shadow-sm">
+          <div class="text-2xl mb-1">⚙️</div>
+          <p class="text-xs font-bold">2. 自動化ツールが検知・運搬</p>
+          <p class="text-xs text-gray-500 mt-1">Zapier / Make / n8n</p>
+        </div>
+        <div class="text-teal-400 self-center text-2xl hidden md:block">→</div>
+        <div class="bg-white rounded-xl p-3 shadow-sm col-span-1 md:col-start-3">
+          <div class="text-2xl mb-1">🤖</div>
+          <p class="text-xs font-bold">3. AIのナレッジベースへ自動注入</p>
+          <p class="text-xs text-gray-500 mt-1">ChatGPT API</p>
+        </div>
+      </div>
+      <div class="mt-4 text-center bg-teal-100 rounded-xl p-3">
+        <p class="text-teal-800 font-bold text-sm">👨 4. 人間はただ、お茶を飲むだけ</p>
+        <p class="text-teal-600 text-xs">手動アップロードからの完全解放！寝ている間にもAIの知識が最新にアップデートされます。</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p class="text-orange-800 font-bold text-sm">😴 ズボラ育成法のポイント</p>
+      <p class="text-orange-700 text-sm mt-1">既存の資料をそのまま放り込む。綺麗に整えるのが面倒なら、最初から「AIが食べやすい形式」で保存しておくのが最大のズボラ術！</p>
+    </div>
+  </div>
+
+  <!-- セキュリティ -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🔐 安全管理</div>
+    <h2 class="text-2xl font-bold mb-2">お隣さんに内緒話を聞かれないために（セキュリティ）</h2>
+    <p class="text-gray-600 text-sm mb-6">意図しない情報漏洩を防ぐ、安全な自動化の鉄則</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">🏢</div>
+        <h3 class="font-bold text-blue-700 mb-2">1. 法人プランの利用</h3>
+        <p class="text-sm text-blue-600">ChatGPT EnterpriseやAPIの活用で、入力データがモデル学習に利用されない設定を担保。</p>
+      </div>
+      <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">🕵️</div>
+        <h3 class="font-bold text-purple-700 mb-2">2. オプトアウトとシークレットモード</h3>
+        <p class="text-sm text-purple-600">個人プランでも「チャット履歴とトレーニング」を必ずOFFにする。一時チャットの活用も有効。</p>
+      </div>
+      <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+        <div class="text-2xl mb-2">🎭</div>
+        <h3 class="font-bold text-green-700 mb-2">3. データの匿名化</h3>
+        <p class="text-sm text-green-600">自動アップロード前に、個人名や企業名を記号（顧客A、プロジェクトXなど）に置き換えるマスキング処理を挟む。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三話：2026年・自律型エージェント -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">第三話</div>
+    <h2 class="text-2xl font-bold mb-2">うちの優秀な新入り</h2>
+    <p class="text-gray-600 text-sm mb-6">2026年問題と自律型エージェント化</p>
+
+    <div class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-5 mb-4">
+      <h3 class="font-bold text-indigo-700 text-lg mb-4">🚀 指示待ちから「自律型スタッフ」へ（2026年AIエージェント化）</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h4 class="font-bold text-indigo-600 mb-3">自律型エージェントの4要素</h4>
+          <div class="space-y-2">
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm">🧠 頭脳（LLM）</p>
+              <p class="text-xs text-gray-600">高度な論理推論で曖昧な指示の意図を把握。</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm">📋 計画（Planning）</p>
+              <p class="text-xs text-gray-600">巨大な目標を自律的に細分化し、ワークフローを決定。</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm">💾 記憶（Memory）</p>
+              <p class="text-xs text-gray-600">過去のエラー履歴を保持し一貫性を維持（Project機能の活用）。</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm">⚡ 行動（Tool Use）</p>
+              <p class="text-xs text-gray-600">ブラウザ操作や外部システム連携を自律実行。</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-indigo-600 mb-3">チームで分担、最後は「自律型エージェント」へ丸投げ</h4>
+          <div class="space-y-3">
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm text-green-700">現在：チーム共有</p>
+              <p class="text-xs text-gray-600">成功したプロンプトやファイル構成を組織内でテンプレート化し共有する。</p>
+              <p class="text-xs text-orange-600 mt-1">※パナソニックコネクトの事例：18.6万時間の削減</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="font-bold text-sm text-purple-700">2026年の未来：エージェント化</p>
+              <p class="text-xs text-gray-600">アドバイザーからスタッフへ。適切な「目標」と「ツール」を与えるだけで自律的に計画・行動。人間の役割は「操作」から「監査（マネジメント）」へシフト！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- めんどくさがり度別マトリクス -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">📊 選択マトリクス</div>
+    <h2 class="text-2xl font-bold mb-6">めんどくさがり度別・AI自動育成マトリクス</h2>
+
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="matrix-cell" style="background: #FFF3E0; border: 2px solid #FFB347;">
+        <div class="text-3xl mb-2">📋</div>
+        <h3 class="font-bold text-orange-700 mb-1">カスタムGPTとズボラファイル投入</h3>
+        <p class="text-xs text-orange-600">（一度作って永久に使い回す）</p>
+        <div class="mt-2 text-xs bg-orange-100 rounded px-2 py-1">個人向け・手動</div>
+      </div>
+      <div class="matrix-cell" style="background: #F3E5F5; border: 2px solid #CE93D8;">
+        <div class="text-3xl mb-2">👑</div>
+        <h3 class="font-bold text-purple-700 mb-1">API連携全自動コンベア＆自律型エージェント</h3>
+        <p class="text-xs text-purple-600">（究極の丸投げ！最終形態）</p>
+        <div class="mt-2 text-xs bg-purple-100 rounded px-2 py-1">チーム向け・全自動</div>
+      </div>
+      <div class="matrix-cell" style="background: #FCE4EC; border: 2px solid #F48FB1;">
+        <div class="text-3xl mb-2">✏️</div>
+        <h3 class="font-bold text-pink-700 mb-1">メモリ機能とプロンプト手打ち</h3>
+        <p class="text-xs text-pink-600">（面倒くさい！ドツボの始まり）</p>
+        <div class="mt-2 text-xs bg-pink-100 rounded px-2 py-1">個人向け・手動</div>
+      </div>
+      <div class="matrix-cell" style="background: #E8F5E9; border: 2px solid #81C784;">
+        <div class="text-3xl mb-2">📚</div>
+        <h3 class="font-bold text-green-700 mb-1">プロンプトとナレッジの共有</h3>
+        <p class="text-xs text-green-600">（みんなで分担して負担軽減）</p>
+        <div class="mt-2 text-xs bg-green-100 rounded px-2 py-1">チーム向け・手動</div>
+      </div>
+    </div>
+    <div class="text-center text-xs text-gray-500">
+      <span>← 個人のお悩み</span>
+      <span class="mx-8">チーム/システム規模 →</span>
+    </div>
+  </div>
+
+  <!-- 効果グラフ -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">📈 導入効果</div>
+    <h2 class="text-2xl font-bold mb-2">育成による導入効果</h2>
+    <p class="text-gray-600 text-sm mb-6">AIを育成することで、具体的にどのようなメリットがあるのかをデータで示します。</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-white rounded-xl border border-orange-200 p-4">
+        <h3 class="text-base font-bold text-center mb-1">回答精度の向上</h3>
+        <p class="text-xs text-gray-500 mb-3 text-center">育成レベルが上がるほど、やり直しの回数が減ります。</p>
+        <div class="chart-container">
+          <canvas id="accuracyChart"></canvas>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-orange-200 p-4">
+        <h3 class="text-base font-bold text-center mb-1">作業時間の削減</h3>
+        <p class="text-xs text-gray-500 mb-3 text-center">テンプレート化により、指示を考える時間が激減します。</p>
+        <div class="chart-container">
+          <canvas id="timeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- まとめ -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">🎯 まとめ</div>
+    <h2 class="text-2xl font-bold mb-6">さーて、来週のAIさんは？（まとめ）</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 text-center">
+        <div class="text-3xl mb-2">📋</div>
+        <h3 class="font-bold text-orange-700 mb-1">その1</h3>
+        <p class="text-sm">毎回教える手間は「カスタムGPT」でゼロにする。</p>
+      </div>
+      <div class="bg-teal-50 border-2 border-teal-200 rounded-xl p-4 text-center">
+        <div class="text-3xl mb-2">⚙️</div>
+        <h3 class="font-bold text-teal-700 mb-1">その2</h3>
+        <p class="text-sm">データの更新は「API連携」の全自動コンベアに任せる。</p>
+      </div>
+      <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 text-center">
+        <div class="text-3xl mb-2">🤖</div>
+        <h3 class="font-bold text-purple-700 mb-1">その3</h3>
+        <p class="text-sm">最後は「自律型エージェント」に目標だけ投げて丸投げ！</p>
+      </div>
+    </div>
+    <div class="bg-orange-600 text-white rounded-2xl p-6 text-center">
+      <p class="text-lg font-bold mb-2">🤖 AIは魔法の杖ではなく、「可能性を秘めた新入社員」です</p>
+      <p class="text-sm opacity-90">適切な「教育（指示）」、良質な「教材（ファイル）」、厳格な「管理（防犯ルール）」が揃ったとき、AIは唯一無二のパートナーへと進化します。</p>
+      <p class="text-sm mt-3 opacity-90">まずは明日、小さな定型業務のファイル（お弁当箱）を一つ、AIに渡してみることから始めましょう。</p>
+      <p class="text-base font-bold mt-3">育成プロセスをなくして、AIと楽しくスマートな毎日を。うーうふふふ！</p>
+    </div>
+  </div>
+
+
+  <!-- PDFスライドセクション -->
+  <div class="section-card p-6 mb-8">
+    <div class="chapter-badge mb-4">📕 スライド資料</div>
+    <h2 class="text-2xl font-bold mb-6">セミナースライド（全ページ閲覧）</h2>
+
+    <!-- PDF1: ChatGPTの育て方 -->
+    <div class="mb-8">
+      <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+        <span class="text-2xl">📗</span>
+        <span>ChatGPTの育て方 〜うちのAIを専用パートナーにする方法〜</span>
+      </h3>
+      <p class="text-sm text-gray-500 mb-3">15スライド構成 / 提供：あなたの組織の知的生産性向上委員会</p>
+      <div style="border: 2px solid #FFD6A0; border-radius: 12px; overflow: hidden;">
+        <iframe
+          src="ChatGPTの育て方.pdf"
+          width="100%"
+          height="600px"
+          style="display:block;"
+          title="ChatGPTの育て方">
+          <p class="p-4 text-sm text-gray-500">お使いのブラウザはPDFインラインプレビューに対応していません。</p>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- PDF2: 全自動AI家族 -->
+    <div>
+      <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+        <span class="text-2xl">📙</span>
+        <span>全自動AI家族！面倒な「育成」は機械におまかせ</span>
+      </h3>
+      <p class="text-sm text-gray-500 mb-3">14スライド構成 / 自動化・省略化の極意</p>
+      <div style="border: 2px solid #FFD6A0; border-radius: 12px; overflow: hidden;">
+        <iframe
+          src="Fully_Automated_AI_Family.pdf"
+          width="100%"
+          height="600px"
+          style="display:block;"
+          title="全自動AI家族">
+          <p class="p-4 text-sm text-gray-500">お使いのブラウザはPDFインラインプレビューに対応していません。</p>
+        </iframe>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center text-gray-400 text-xs py-8">
+    <p>🎙️ NotebookLM セミナー資料 | ChatGPTの育て方</p>
+    <p class="mt-1">提供：あなたの組織の知的生産性向上委員会</p>
+  </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // タブ機能
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      const parent = btn.closest('.bg-white');
+      
+      parent.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('text-orange-600', 'border-orange-500');
+        b.classList.add('text-gray-500', 'border-transparent');
+      });
+      btn.classList.add('text-orange-600', 'border-orange-500');
+      btn.classList.remove('text-gray-500', 'border-transparent');
+      
+      parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      const targetEl = document.getElementById(target);
+      if (targetEl) targetEl.classList.add('active');
+    });
+  });
+  
+  // 最初のタブをアクティブに
+  tabBtns.forEach(btn => {
+    const parent = btn.closest('.bg-white');
+    const isFirst = btn === parent.querySelectorAll('.tab-btn')[0];
+    if (isFirst) {
+      btn.classList.add('text-orange-600', 'border-orange-500');
+      btn.classList.remove('text-gray-500', 'border-transparent');
+    }
+  });
+
+  // RAGシミュレーション
+  const startBtn = document.getElementById('start-sim-btn');
+  const flow1 = document.getElementById('flow1');
+  const flow2 = document.getElementById('flow2');
+  const flow3 = document.getElementById('flow3');
+  const text1 = document.getElementById('sim-text-1');
+  const text2 = document.getElementById('sim-text-2');
+  const text3 = document.getElementById('sim-text-3');
+  const resultBox = document.getElementById('sim-result');
+
+  startBtn.addEventListener('click', () => {
+    startBtn.disabled = true;
+    startBtn.classList.add('opacity-50');
+    [flow1, flow2, flow3].forEach(el => el.classList.remove('active-step'));
+    resultBox.style.opacity = '0';
+    text1.innerText = '質問を入力中...';
+    text2.innerText = '待機中...';
+    text3.innerText = '待機中...';
+
+    setTimeout(() => {
+      flow1.classList.add('active-step');
+      text1.innerText = '「就業規則の変更手順は？」';
+    }, 500);
+    setTimeout(() => {
+      flow1.classList.remove('active-step');
+      flow2.classList.add('active-step');
+      text2.innerText = '就業規則PDF から抽出中...';
+    }, 2000);
+    setTimeout(() => {
+      flow2.classList.remove('active-step');
+      flow3.classList.add('active-step');
+      text3.innerText = '知識と文脈を結合中...';
+    }, 3500);
+    setTimeout(() => {
+      flow3.classList.remove('active-step');
+      resultBox.innerText = '最終出力: 「御社の就業規則第12条によると、変更には労働組合または過半数代表者への説明と意見聴取が必要です。」';
+      resultBox.style.opacity = '1';
+      startBtn.disabled = false;
+      startBtn.classList.remove('opacity-50');
+      startBtn.innerText = 'もう一度シミュレーション';
+    }, 5000);
+  });
+
+  // グラフ
+  function wrapLabel(label, maxLength = 16) {
+    if (label.length <= maxLength) return label;
+    const words = label.split(' ');
+    let lines = [];
+    let currentLine = '';
+    words.forEach(word => {
+      if ((currentLine + word).length > maxLength) {
+        if (currentLine) lines.push(currentLine.trim());
+        currentLine = word + ' ';
+      } else {
+        currentLine += word + ' ';
+      }
+    });
+    if (currentLine) lines.push(currentLine.trim());
+    return lines;
+  }
+
+  const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
+  new Chart(accuracyCtx, {
+    type: 'bar',
+    data: {
+      labels: ['未設定', 'テンプレート', 'カスタム指示', 'ファイル学習'],
+      datasets: [{
+        label: '期待通りの回答率 (%)',
+        data: [30, 60, 80, 95],
+        backgroundColor: ['#E7E5E4', '#FED7AA', '#FDBA74', '#FF8C42'],
+        borderColor: ['#D6D3D1', '#FCA5A5', '#FB923C', '#FF6B35'],
+        borderWidth: 2,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color: '#FFF3E0' } },
+        x: { grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  const timeCtx = document.getElementById('timeChart').getContext('2d');
+  new Chart(timeCtx, {
+    type: 'line',
+    data: {
+      labels: ['導入前', '1週間後', '2週間後', '3週間後', '1ヶ月後'],
+      datasets: [{
+        label: 'プロンプト作成時間 (分/回)',
+        data: [15, 8, 4, 2, 1],
+        fill: true,
+        backgroundColor: 'rgba(255, 140, 66, 0.1)',
+        borderColor: '#FF8C42',
+        tension: 0.3,
+        pointBackgroundColor: '#FF8C42',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#FFF3E0' } },
+        x: { grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+});
+</script>
+</body>
+</html>
